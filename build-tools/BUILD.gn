@@ -43,4 +43,8 @@ config("c_v8_config") {
       "-fansi-escape-codes",
     ]
   }
+
+  # Explicitly ensure PIC for PIE compatibility
+  cflags += [ "-fPIC" ]
+  ldflags += [ "-fPIC" ]
 }

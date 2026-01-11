@@ -364,9 +364,29 @@ fn buildV8(
                 try gn_args.appendSlice(allocator, "clang_use_chrome_plugins=false\n");
                 try gn_args.appendSlice(allocator, "treat_warnings_as_errors=false\n");
             }
+            // Ensure PIC for PIE compatibility on Linux
+            try gn_args.appendSlice(allocator, "cflags+=- -fPIC\n");
+            try gn_args.appendSlice(allocator, "ldflags+= -fPIC\n");
         },
-        else => {},
+        .macos => {
+            // Ensure PIC for PIE compatibility on macOS
+            try gn_args.appendSlice(allocator, "cflags+=- -fPIC\n");
+            try gn_args.appendSlice(allocator, "ldflags+= -fPIC\n");
+        },
+        .windows => {
+            // Ensure PIC for PIE compatibility on Windows
+            try gn_args.appendSlice(allocator, "cflags+= -fPIC\n");
+        },
+        else => {
+            // Ensure PIC for PIE compatibility on other platforms
+            try gn_args.appendSlice(allocator, "cflags+=- -fPIC\n");
+            try gn_args.appendSlice(allocator, "ldflags+= -fPIC\n");
+        },
     }
+
+    // V8-specific PIC considerations
+    try gn_args.appendSlice(allocator, "v8_enable_static_library=true\n");
+    try gn_args.appendSlice(allocator, "v8_enable_pointer_compression=true\n");
 
     const out_dir = b.fmt("out/{s}/{s}", .{ @tagName(tag), if (is_debug) "debug" else "release" });
 
