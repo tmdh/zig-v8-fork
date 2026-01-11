@@ -368,6 +368,10 @@ fn buildV8(
         else => {},
     }
 
+    // V8-specific PIC considerations
+    try gn_args.appendSlice(allocator, "v8_enable_static_library=true\n");
+    try gn_args.appendSlice(allocator, "v8_enable_pointer_compression=true\n");
+
     const out_dir = b.fmt("out/{s}/{s}", .{ @tagName(tag), if (is_debug) "debug" else "release" });
 
     const gn_run = b.addSystemCommand(&.{
