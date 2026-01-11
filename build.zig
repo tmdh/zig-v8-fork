@@ -365,12 +365,12 @@ fn buildV8(
                 try gn_args.appendSlice(allocator, "treat_warnings_as_errors=false\n");
             }
             // Ensure PIC for PIE compatibility on Linux
-            try gn_args.appendSlice(allocator, "cflags+=- -fPIC\n");
+            try gn_args.appendSlice(allocator, "cflags+= -fPIC\n");
             try gn_args.appendSlice(allocator, "ldflags+= -fPIC\n");
         },
         .macos => {
             // Ensure PIC for PIE compatibility on macOS
-            try gn_args.appendSlice(allocator, "cflags+=- -fPIC\n");
+            try gn_args.appendSlice(allocator, "cflags+= -fPIC\n");
             try gn_args.appendSlice(allocator, "ldflags+= -fPIC\n");
         },
         .windows => {
@@ -379,7 +379,7 @@ fn buildV8(
         },
         else => {
             // Ensure PIC for PIE compatibility on other platforms
-            try gn_args.appendSlice(allocator, "cflags+=- -fPIC\n");
+            try gn_args.appendSlice(allocator, "cflags+= -fPIC\n");
             try gn_args.appendSlice(allocator, "ldflags+= -fPIC\n");
         },
     }
